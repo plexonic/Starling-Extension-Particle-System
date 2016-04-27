@@ -1,7 +1,7 @@
 package
 {
     import flash.ui.Keyboard;
-    
+
     import starling.core.Starling;
     import starling.display.Sprite;
     import starling.events.Event;
@@ -12,7 +12,7 @@ package
     import starling.extensions.PDParticleSystem;
     import starling.extensions.ParticleSystem;
     import starling.textures.Texture;
-    
+
     public class Demo extends Sprite
     {
         // particle designer configurations
@@ -25,44 +25,44 @@ package
         
         [Embed(source="../media/sun.pex", mimeType="application/octet-stream")]
         private static const SunConfig:Class;
-        
+
         [Embed(source="../media/jellyfish.pex", mimeType="application/octet-stream")]
         private static const JellyfishConfig:Class;
-        
+
         // particle textures
         
-        [Embed(source = "../media/drugs_particle.png")]
+        [Embed(source="../media/drugs_particle.png")]
         private static const DrugsParticle:Class;
         
-        [Embed(source = "../media/fire_particle.png")]
+        [Embed(source="../media/fire_particle.png")]
         private static const FireParticle:Class;
         
-        [Embed(source = "../media/sun_particle.png")]
+        [Embed(source="../media/sun_particle.png")]
         private static const SunParticle:Class;
         
-        [Embed(source = "../media/jellyfish_particle.png")]
+        [Embed(source="../media/jellyfish_particle.png")]
         private static const JellyfishParticle:Class;
-        
+
         // member variables
         
-        private var mParticleSystems:Vector.<ParticleSystem>;
-        private var mParticleSystem:ParticleSystem;
+        private var _particleSystems:Vector.<ParticleSystem>;
+        private var _particleSystem:ParticleSystem;
         
         public function Demo()
         {
             var drugsConfig:XML = XML(new DrugsConfig());
-            var drugsTexture:Texture = Texture.fromBitmap(new DrugsParticle());
-            
+            var drugsTexture:Texture = Texture.fromEmbeddedAsset(DrugsParticle);
+
             var fireConfig:XML = XML(new FireConfig());
-            var fireTexture:Texture = Texture.fromBitmap(new FireParticle());
-            
+            var fireTexture:Texture = Texture.fromEmbeddedAsset(FireParticle);
+
             var sunConfig:XML = XML(new SunConfig());
-            var sunTexture:Texture = Texture.fromBitmap(new SunParticle());
-            
+            var sunTexture:Texture = Texture.fromEmbeddedAsset(SunParticle);
+
             var jellyConfig:XML = XML(new JellyfishConfig());
-            var jellyTexture:Texture = Texture.fromBitmap(new JellyfishParticle());
-            
-            mParticleSystems = new <ParticleSystem>[
+            var jellyTexture:Texture = Texture.fromEmbeddedAsset(JellyfishParticle);
+
+            _particleSystems = new <ParticleSystem>[
                 new PDParticleSystem(drugsConfig, drugsTexture),
                 new PDParticleSystem(fireConfig, fireTexture),
                 new PDParticleSystem(sunConfig, sunTexture),
@@ -77,22 +77,22 @@ package
         
         private function startNextParticleSystem():void
         {
-            if (mParticleSystem)
+            if (_particleSystem)
             {
-                mParticleSystem.stop();
-                mParticleSystem.removeFromParent();
-                Starling.juggler.remove(mParticleSystem);
+                _particleSystem.stop();
+                _particleSystem.removeFromParent();
+                Starling.juggler.remove(_particleSystem);
             }
             
-            mParticleSystem = mParticleSystems.shift();
-            mParticleSystems.push(mParticleSystem);
+            _particleSystem = _particleSystems.shift();
+            _particleSystems.push(_particleSystem);
 
-            mParticleSystem.emitterX = 320;
-            mParticleSystem.emitterY = 240;
-            mParticleSystem.start();
+            _particleSystem.emitterX = 320;
+            _particleSystem.emitterY = 240;
+            _particleSystem.start();
             
-            addChild(mParticleSystem);
-            Starling.juggler.add(mParticleSystem);
+            addChild(_particleSystem);
+            Starling.juggler.add(_particleSystem);
         }
         
         private function onAddedToStage(event:Event):void
@@ -120,8 +120,8 @@ package
             var touch:Touch = event.getTouch(stage);
             if (touch && touch.phase != TouchPhase.HOVER)
             {
-                mParticleSystem.emitterX = touch.globalX;
-                mParticleSystem.emitterY = touch.globalY;
+                _particleSystem.emitterX = touch.globalX;
+                _particleSystem.emitterY = touch.globalY;
             }
         }
     }
